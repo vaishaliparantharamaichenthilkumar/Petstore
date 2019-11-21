@@ -1,0 +1,18 @@
+{
+  "id": 0,
+  "category": {
+    "id": 101,
+    "name": "Animals"
+  },
+  "name": "Tommy",
+  "photoUrls": [
+    "https:\/\/www.pexels.com\/photo\/animal-beagle-canine-close-up-460823\/"
+  ],
+  "tags": [
+    {
+      "id": 67891,
+      "name": "HomeDog"
+    }
+  ],
+  "status": "available"
+}
