@@ -11,7 +11,10 @@ import org.junit.Test;
 
 import org.json.simple.parser.JSONParser;
 import org.json.simple.JSONObject;
+import org.junit.FixMethodOrder;
+import org.junit.runners.MethodSorters;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PetStoreTests {
 
     JSONParser parser = new JSONParser();
@@ -27,7 +30,7 @@ public class PetStoreTests {
 
     //TestCase-01 To create a Pet for PetStore and validate the Pet details are created correctly.
     @Test
-    public void tc01_createPetTests() throws Exception {
+    public void tc01createPetTests() throws Exception {
         String baseUrl = Config.hostname;
         String path = Config.petApi;
         String fileName = Config.createFileName;
@@ -41,17 +44,19 @@ public class PetStoreTests {
 
         //Verify whether the Pet created matches with the input given.
         JSONObject obj = (JSONObject) parser.parse(response.getBody().asString());
+        petIdCreated = obj.get("id").toString();
         validation.validatePetDetails(obj,petName);
     }
 
     //TestCase-02 To update a Pet for PetStore and validate the Pet details are updated correctly.
     @Test
-    public void tc02_updatePetTests() throws Exception {
+    public void tc02updatePetTests() throws Exception {
         String baseUrl = Config.hostname;
         String path = Config.petApi;
         String fileName = Config.updateFileName;
         String updatedPetName = TestData.updatedPetName;
         JsonObject jsonString = testUtils.readJsonPrepareData(fileName);
+        jsonString.addProperty("id",petIdCreated);
         Response response = HttpUtils.putHttpRequest(baseUrl, path, jsonString);
 
         //Verify Pet is updated successfully.
@@ -66,7 +71,7 @@ public class PetStoreTests {
 
     //TestCase-03 To Delete a Pet for PetStore and validate the Pet details are deleted correctly.
     @Test
-    public void tc03_deletePetTests() throws ParseException {
+    public void tc03deletePetTests() throws ParseException {
         String baseUrl = Config.hostname;
         System.out.println("PetId->" + petIdCreated);
         String path = Config.petApi + "/" + petIdCreated;
