@@ -20,7 +20,12 @@ public class PetStoreTests {
     JSONParser parser = new JSONParser();
     Validation validation = new Validation();
     TestUtils testUtils = new TestUtils();
+
     public static String petIdCreated;
+    public static String practiTestFileName = Config.pt_fileName;
+    public static String projectId = Config.pt_ProjectId;
+    public static String instanceId;
+    int status;
 
     //Pre-Requisite -> Get the host information based on the environment.
     @Before
@@ -30,7 +35,8 @@ public class PetStoreTests {
 
     //TestCase-01 To create a Pet for PetStore and validate the Pet details are created correctly.
     @Test
-    public void tc01createPetTests() throws Exception {
+    public void tc01createPetTests() throws Exception, AssertionError {
+        instanceId = Config.pt_testCase_001;
         String baseUrl = Config.hostname;
         String path = Config.petApi;
         String fileName = Config.createFileName;
@@ -45,12 +51,25 @@ public class PetStoreTests {
         //Verify whether the Pet created matches with the input given.
         JSONObject obj = (JSONObject) parser.parse(response.getBody().asString());
         petIdCreated = obj.get("id").toString();
-        validation.validatePetDetails(obj,petName);
+        try{
+            validation.validatePetDetails(obj,petName);
+            //Update PractiTest
+            status=0;
+            Response practiTestResponse = testUtils.updatePractitest(practiTestFileName, projectId, instanceId, status);
+            assert(practiTestResponse.getStatusCode() == 200);
+        }
+        catch(AssertionError e){
+            //Update PractiTest
+            status=1;
+            Response practiTestResponse = testUtils.updatePractitest(practiTestFileName, projectId, instanceId, status);
+            assert(practiTestResponse.getStatusCode() == 200);
+        }
     }
 
     //TestCase-02 To update a Pet for PetStore and validate the Pet details are updated correctly.
     @Test
     public void tc02updatePetTests() throws Exception {
+        instanceId = Config.pt_testCase_002;
         String baseUrl = Config.hostname;
         String path = Config.petApi;
         String fileName = Config.updateFileName;
@@ -66,12 +85,25 @@ public class PetStoreTests {
         //Verify whether the Pet updated matches with the input given.
         JSONObject obj = (JSONObject) parser.parse(response.getBody().asString());
         petIdCreated = obj.get("id").toString();
-        validation.validatePetDetails(obj,updatedPetName);
+        try{
+            validation.validatePetDetails(obj,updatedPetName);
+            //Update PractiTest
+            status=0;
+            Response practiTestResponse = testUtils.updatePractitest(practiTestFileName, projectId, instanceId, status);
+            assert(practiTestResponse.getStatusCode() == 200);
+        }
+        catch(AssertionError e){
+            //Update PractiTest
+            status=1;
+            Response practiTestResponse = testUtils.updatePractitest(practiTestFileName, projectId, instanceId, status);
+            assert(practiTestResponse.getStatusCode() == 200);
+        }
     }
 
     //TestCase-03 To Delete a Pet for PetStore and validate the Pet details are deleted correctly.
     @Test
-    public void tc03deletePetTests() throws ParseException {
+    public void tc03deletePetTests() throws ParseException, Exception {
+        instanceId = Config.pt_testCase_003;
         String baseUrl = Config.hostname;
         System.out.println("PetId->" + petIdCreated);
         String path = Config.petApi + "/" + petIdCreated;
@@ -85,6 +117,18 @@ public class PetStoreTests {
         Response getPetResponse = HttpUtils.getHttpRequest(baseUrl,path);
         assert (getPetResponse.getStatusCode() == 404);
         JSONObject responseBodyObj = (JSONObject) parser.parse(getPetResponse.getBody().asString());
-        assert (responseBodyObj.get("message").toString().equalsIgnoreCase("Pet not found"));
+        try{
+            assert (responseBodyObj.get("message").toString().equalsIgnoreCase("Pet not found"));
+            //Update PractiTest
+            status=0;
+            Response practiTestResponse = testUtils.updatePractitest(practiTestFileName, projectId, instanceId, status);
+            assert(practiTestResponse.getStatusCode() == 200);
+        }
+        catch(AssertionError e){
+            //Update PractiTest
+            status=1;
+            Response practiTestResponse = testUtils.updatePractitest(practiTestFileName, projectId, instanceId, status);
+            assert(practiTestResponse.getStatusCode() == 200);
+        }
     }
 }
