@@ -51,6 +51,7 @@ public class PetStoreTests {
         //Verify whether the Pet created matches with the input given.
         JSONObject obj = (JSONObject) parser.parse(response.getBody().asString());
         petIdCreated = obj.get("id").toString();
+        petName = "fujwroijferg";
         try{
             validation.validatePetDetails(obj,petName);
             //Update PractiTest
