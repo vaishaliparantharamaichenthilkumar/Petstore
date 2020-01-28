@@ -14,8 +14,8 @@ public class Config {
     public static String practiTestRunUpdateAPI = "/runs.json";
 
     //TestData fileName
-    public static String createFileName = "CreatePetJsonBody";
-    public static String updateFileName = "UpdatePetJsonBody";
+    public static String createFileName = "CreatePetJsonBody.json";
+    public static String updateFileName = "UpdatePetJsonBody.json";
 
     //PractiTest details
     public static String pt_ProjectId = "14445";
