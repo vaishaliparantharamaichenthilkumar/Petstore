@@ -42,21 +42,4 @@ public class TestUtils {
         }
         return data;
     }
-    public Response updatePractitest(String fileName, String projectId, String instanceId, int status) throws Exception, IOException{
-        Boolean statusUpdated = true;
-        String baseURL = Config.practiTestHostName;
-        String api = Config.practiTestApi;
-        String runApi = Config.practiTestRunUpdateAPI;
-        String path = api+projectId+runApi;
-        String apiToken = Config.pt_api_Token;
-        String developerEmailId = Config.pt_developer_emailId;
-        JSONObject jsonBody = readJson(fileName);
-        JSONObject parsingBody = (JSONObject) parser.parse(jsonBody.toJSONString());
-        JSONObject dataBody = (JSONObject) parsingBody.get("data");
-        JSONObject attributeJsonBody = (JSONObject) dataBody.get("attributes");
-        attributeJsonBody.put("exit-code", status);
-        attributeJsonBody.put("instance-id", instanceId);
-        System.out.println(parsingBody);
-        return HttpUtils.postPractiTestHttpRequest(baseURL,path,apiToken, developerEmailId, parsingBody);
-    }
 }

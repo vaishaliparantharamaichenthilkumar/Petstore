@@ -5,7 +5,7 @@ import au.com.dius.pact.consumer.PactProviderRuleMk2;
 
 import au.com.dius.pact.consumer.PactVerification;
 import au.com.dius.pact.consumer.dsl.DslPart;
-import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
+import au.com.dius.pact.consumer.dsl.PactDslJsonArray;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.model.RequestResponsePact;
 
@@ -18,57 +18,45 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.*;
 
-public class PublishPetStoreTests {
+public class PublishCompanyTests {
 
     Map<String, String> headers = new HashMap<String, String>();
 
     // The rule is created to mock the service.
     @Rule
-    public PactProviderRuleMk2 mockProvider = new PactProviderRuleMk2("petstore", "localhost", 8090, this);
+    public PactProviderRuleMk2 mockProvider = new PactProviderRuleMk2("companies", "localhost", 8090, this);
 
-    @Pact (provider = "petstore", consumer = "traderdirectory")
+    @Pact (provider = "companies", consumer = "traderdirectory")
     public RequestResponsePact createFragment(PactDslWithProvider builder) throws IOException{
         headers.put("Content-Type", "application/json");
 
-        DslPart getPets = new PactDslJsonBody()
-                .numberType("id")
-                .stringType("name")
-                .stringType("status")
-                .object("category")
+        DslPart getCompanies = new PactDslJsonArray()
+                .arrayEachLike()
                     .numberType("id")
                     .stringType("name")
-                .closeObject()
-                .array("photoUrls")
-                    .stringType()
-                .closeArray()
-                .array("tags")
-                    .object()
-                        .numberType("id")
-                        .stringType("name")
-                    .closeObject()
-                .closeArray();
+                .closeObject();
 
         return builder
-                .given("Get Pet information")
-                .uponReceiving("Get Pet call")
-                    .path("/v2/pet/9216678377732861246")
-                    .method("GET")
+                .given("Get Companies information")
+                .uponReceiving("Get Companies call")
+                .path("/companies")
+                .method("GET")
                 .willRespondWith()
-                    .status(200)
-                    .body(getPets)
-                    .headers(headers)
+                .status(200)
+                .body(getCompanies)
+                .headers(headers)
                 .toPact();
     }
 
     @Test
-    @PactVerification ("petstore")
+    @PactVerification ("companies")
     public void runTest() {
         RestAssured.baseURI = "http://localhost:8090";
 
         Response response = RestAssured
                 .given()
                 .when()
-                .get("/v2/pet/9216678377732861246");
+                .get("/companies");
 
         assert (response.getStatusCode() == 200);
     }

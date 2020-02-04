@@ -52,8 +52,9 @@
         </dependency>
         <dependency>
             <groupId>au.com.dius</groupId>
-            <artifactId>pact-jvm-consumer</artifactId>
-            <version>4.0.0</version>
+            <artifactId>pact-jvm-consumer-junit_2.11</artifactId>
+            <version>3.5.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
@@ -66,7 +67,34 @@
             <plugin>
                 <groupId>au.com.dius</groupId>
                 <artifactId>pact-jvm-provider-maven</artifactId>
-                <version>4.0.0</version>
+                <version>4.0.1</version>
+                <configuration>
+                    <serviceProviders>
+                        <serviceProvider>
+                            <name>petstore</name>
+                            <!-- All the provider properties are optional, and have sensible defaults (shown below) -->
+                            <protocol>http</protocol>
+                            <host>petstore.swagger.io</host>
+                            <port>80</port>
+                        </serviceProvider>
+                        <serviceProvider>
+                            <name>companies</name>
+                            <!-- All the provider properties are optional, and have sensible defaults (shown below) -->
+                            <protocol>http</protocol>
+                            <host>api.company-poc-develop.hyperionic.io</host>
+                            <port>80</port>
+                        </serviceProvider>
+                    </serviceProviders>
+                    <reports>
+                        <report>console</report>
+                        <report>json</report>
+                        <report>markdown</report>
+                    </reports>
+                    <pactBrokerUrl>https://we-trade.pact.dius.com.au/</pactBrokerUrl>
+                    <pactBrokerToken>d-lzdQVaZFvhhdrHbhp5DA</pactBrokerToken> <!-- Replace TOKEN with the actual token -->
+                    <pactBrokerAuthenticationScheme>Bearer</pactBrokerAuthenticationScheme>
+                    <pactDirectory>target/pacts</pactDirectory>
+                </configuration>
             </plugin>
         </plugins>
     </build>
